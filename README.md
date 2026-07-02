@@ -1,13 +1,13 @@
 # knowledge-base
 
-基于文件系统的团队知识库 MCP 服务。知识以 YAML+Markdown 文件存储，Go 服务提供 JSON-RPC 2.0 查询与草稿接口。
+基于文件系统的团队知识库 MCP 服务。知识以 YAML+Markdown 文件存储在独立的私有 Git 仓库中（通过 `-dir` 指定），Go 服务提供 JSON-RPC 2.0 查询与草稿接口。
 
 ## 快速开始
 
 ```bash
-# 启动服务
+# 启动服务（指向独立知识库）
 go build -o knowledge-server ./cmd/server
-./knowledge-server -dir ./knowledge -port 8080
+./knowledge-server -dir ../knowledge-repo -port 8080
 
 # 查询知识
 curl -X POST http://localhost:8080/query \
@@ -23,12 +23,15 @@ curl -X POST http://localhost:8080/draft \
 ## 目录结构
 
 ```
-knowledge/      ← 知识库根目录
-├── dev/        ← 开发领域
-│   ├── common/ ← 通用规范
-│   └── client-xx-bank/  ← 甲方定制
-├── drafts/     ← 待审核草稿
-└── archive/    ← 历史归档
+../knowledge-repo/   ← 独立私有 Git 仓库（由 -dir 指向）
+├── .tag_aliases.yaml
+├── dev/             ← 活跃知识
+│   ├── common/
+│   └── client-xx-bank/
+├── drafts/          ← 待审核草稿
+└── archive/         ← 历史归档（索引排除）
+
+本仓库 knowledge/   ← 仅含占位 README，无实际内容
 ```
 
 ## 命令

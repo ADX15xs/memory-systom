@@ -1,6 +1,6 @@
 # knowledge-base — 记忆系统 MCP 服务
 
-基于文件系统的知识库检索 MCP 服务。知识以 YAML+Markdown 文件存储在 `knowledge/` 目录中，Go 服务提供 JSON-RPC 2.0 查询/草稿接口。
+基于文件系统的知识库检索 MCP 服务。知识以 YAML+Markdown 文件存储在独立的私有 Git 仓库 `../knowledge-repo/` 中（通过 `-dir` 指定），Go 服务提供 JSON-RPC 2.0 查询/草稿接口。
 
 ---
 
@@ -18,7 +18,8 @@
 | `go build ./...` | 检查编译 |
 | `go test ./...` | 运行全部测试 |
 | `go test ./internal/tag/ ./internal/search/ -v` | 运行指定包测试+详细输出 |
-| `./knowledge-server.exe -dir ./knowledge -port 8080` | 启动服务 |
+| `./knowledge-server.exe -dir ./knowledge -port 8080` | 启动服务（加载知识库占位目录） |
+| `./knowledge-server.exe -dir ../knowledge-repo -port 8080` | 启动服务（加载独立私有知识库） |
 
 ## Architecture
 
@@ -30,7 +31,11 @@ internal/
 ├── search/                 ← 倒排索引检索引擎（BuildIndex, Search）
 ├── server/                 ← MCP JSON-RPC 2.0 HTTP 服务（/query, /draft, /drafts）
 └── watch/                  ← fsnotify 热加载（递归监听 + 100ms 防抖）
-knowledge/              ← 知识库根目录（.tag_aliases.yaml, dev/, drafts/, archive/）
+../knowledge-repo/      ← 知识库独立私有仓库（由 -dir 指向）
+├── .tag_aliases.yaml       ← 标签别名映射
+├── dev/                    ← 活跃知识目录
+├── drafts/                 ← 草稿目录
+└── archive/                ← 历史归档（索引排除）
 ```
 
 **数据流**: 文件变更 → watch 触发 → store.Reload() → engine.BuildIndex() → 查询走内存索引
@@ -46,5 +51,7 @@ knowledge/              ← 知识库根目录（.tag_aliases.yaml, dev/, drafts
 - **草稿流程**: `drafts/` → 人工审核 → `Post /drafts/approve` → 移入 `dev/` 对应目录
 
 ## Notes
+
+- **知识库审计**: 所有修订记录在 `../knowledge-repo/` 中通过 Git 管理，使用 `git log`/`git diff`/`git blame` 审计
 
 <!-- Quick-add space for future task-specific facts -->

@@ -1,54 +1,53 @@
-# `knowledge/` — 知识库根目录(本地私有)
+# `knowledge/` — 知识库占位目录
 
-> ⚠️ **本目录已被 `.gitignore` 整体忽略,不会 push 到 GitHub。**
-> 本仓库只提供**记忆系统**这套服务,知识数据由你/团队在本地维护。
+> ⚠️ **知识库已迁出本项目，转移到独立私有 Git 仓库管理。**
+>
+> 本目录不再包含实际知识内容，仅为兼容 `-dir ./knowledge` 默认启动保留占位。
+> 实际知识库托管在项目同级 `../knowledge-repo/`。
 
----
-
-## 本地初始化
+## 快速开始
 
 ```bash
-# 启动服务时通过 -dir 指向本目录即可
-./knowledge-server -dir ./knowledge -port 8080
+# 启动服务时指向独立知识库
+cd /d/github-clone/memory-system
+./knowledge-server.exe -dir ../knowledge-repo -port 8080
 ```
 
-启动后,首次写入会由服务自动创建子目录。如需手动初始化目录结构:
+## 审计与修订历史
 
-```
-knowledge/
-├── .tag_aliases.yaml    ← 标签别名(建议自备一份)
-├── dev/                 ← 开发领域
-│   └── common/          ← 通用规范
-├── drafts/              ← 待审核草稿
-└── archive/             ← 历史归档
-```
+知识库使用独立 Git 仓库进行版本管理：
 
-## 文档格式
+```bash
+cd /d/github-clone/knowledge-repo
 
-```yaml
----
-title: 你的知识标题
-status: active
-created_at: 2026-01-01T00:00:00+08:00
-tags:
-  - "场景:开发"
-  - "域:Go"
-  - "类型:规范"
-  - "甲方:通用"
----
-## 正文 Markdown
-...
+# 查看变更历史
+git log --oneline
+
+# 查看某次变更详情
+git show <commit-hash>
+
+# 查看某个文件的修改记录
+git log --follow -- <file>
+
+# 查看某行最后的修改者
+git blame <file>
 ```
 
-## 标签规范
+## 目录结构（独立仓库内）
 
-- 格式: `维度:值`(如 `场景:开发`)
-- 推荐四维: `场景` / `域` / `类型` / `甲方`
-- 至少 3 个标签
-- 可在 `.tag_aliases.yaml` 中维护别名映射
+```
+knowledge-repo/
+├── .tag_aliases.yaml    ← 标签别名
+├── dev/                 ← 活跃知识（开发领域）
+│   ├── common/          ← 通用规范
+│   ├── client-xx-bank/  ← 按客户端/项目归类的知识
+│   └── ...              ← 其他领域子目录
+├── drafts/              ← 待审核草稿（服务自动创建）
+└── archive/             ← 历史归档（不在索引中加载）
+```
 
-## 隐私
+## 隐私说明
 
-- 本目录**严禁**提交到任何公开仓库
-- 客户名、内部 IP、SFTP 路径、账号信息一律不得出现在知识条目中
-- 如需分享单条知识,先做脱敏并经合规审核
+- 这个独立的 knowledge-repo **永远不要 push 到公开仓库**
+- 它和 memory-system 项目的公开 git 历史完全隔离
+- 所有客户名、内部 IP、账号信息仍按原规范禁止出现在知识条目中

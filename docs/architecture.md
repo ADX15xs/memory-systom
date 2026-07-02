@@ -26,7 +26,7 @@ graph TB
     end
 
     subgraph 基础设施层
-        J[文件系统<br/>knowledge/]
+        J[文件系统<br/>../knowledge-repo/]
         K[dev/<br/>common/<br/>client-xx-bank/]
         L[drafts/<br/>待审核]
         M[archive/<br/>历史归档]
@@ -48,7 +48,7 @@ graph TB
 ## 📂 目录结构（MVP 版）
 
 ```text
-knowledge/                  # 根目录（Git 仓库）
+../knowledge-repo/           # 独立私有 Git 仓库（由 -dir 指向）
 ├── dev/                    # 唯一领域（MVP 阶段）
 │   ├── common/             # 跨甲方通用规则
 │   │   └── go-coding-standards.yaml
@@ -61,6 +61,8 @@ knowledge/                  # 根目录（Git 仓库）
 ├── archive/                # 历史归档（废弃/合并的记录）
 ├── .tag_aliases.yaml       # 全局标签别名映射表
 └── AGENTS.md               # Agent 维护手册
+
+memory-system/knowledge/    # 仅占位 README，无实际内容
 ```
 
 ---
@@ -153,22 +155,19 @@ knowledge/                  # 根目录（Git 仓库）
 ## 🚀 部署与运行
 
 ```bash
-# 1. 克隆知识库
-git clone https://git.company.com/knowledge-base.git
-cd knowledge
-
-# 2. 编译 Go 服务
+# 1. 编译 Go 服务
+cd /d/github-clone/memory-system
 go build -o knowledge-server ./cmd/server
 
-# 3. 启动服务（监听 8080 端口）
-./knowledge-server -dir ./ -port 8080
+# 2. 启动服务（-dir 指向独立知识库）
+./knowledge-server -dir /d/github-clone/knowledge-repo -port 8080
 
-# 4. 测试查询
+# 3. 测试查询
 curl -X POST http://localhost:8080/query \
   -H "Content-Type: application/json" \
   -d '{"jsonrpc":"2.0","method":"query_knowledge","params":{"query":"go 服务 k8s 部署失败"},"id":1}'
 
-# 5. 提交草稿
+# 4. 提交草稿
 curl -X POST http://localhost:8080/draft \
   -H "Content-Type: application/json" \
   -d '{

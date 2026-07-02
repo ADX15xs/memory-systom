@@ -58,12 +58,8 @@ runtime/
 data/
 
 # =============================================================
-# 知识库:本地私有,严禁 push 到公开仓库
-# 整个 knowledge/ 目录均为个人/团队内部知识,
-# 客户名 / 内部 IP / SFTP 路径 / 账号 / 业务数据一律不得外传。
-# 启动时用 -dir ./knowledge 指向本地目录。
+# 知识库已独立到 ../knowledge-repo/（独立私有 Git 仓库）
+# 本目录仅为占位 README，保留 gitignore 防止误提交。
+# 启动时用 -dir ../knowledge-repo 指向实际知识库。
 # =============================================================
 knowledge/**
-# 例外:只让根目录的 README.md 留作公开说明
-# (有 README.md 即足以让 knowledge/ 目录在 clone 后存在,无需 .gitkeep)
-!/knowledge/README.md
