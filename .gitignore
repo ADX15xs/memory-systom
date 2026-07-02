@@ -1,0 +1,69 @@
+# ====== 构建产物 ======
+# Go 编译产物
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+knowledge-server
+knowledge-server.exe
+
+# 测试产物
+*.test
+*.test.exe
+*.out
+coverage.txt
+coverage.html
+
+# Go workspace
+go.work
+go.work.sum
+
+# ====== 临时文件 ======
+tmp_*
+test_*
+*.tmp
+*.swp
+*.swo
+*.bak
+*~
+.~*
+
+# ====== 编辑器/IDE ======
+.vscode/
+.idea/
+*.iml
+*.sublime-project
+*.sublime-workspace
+
+# ====== 操作系统 ======
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ====== 环境/密钥(防御性) ======
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.crt
+secrets.yaml
+config.local.yaml
+
+# ====== 日志/运行时数据 ======
+*.log
+logs/
+runtime/
+data/
+
+# =============================================================
+# 知识库:本地私有,严禁 push 到公开仓库
+# 整个 knowledge/ 目录均为个人/团队内部知识,
+# 客户名 / 内部 IP / SFTP 路径 / 账号 / 业务数据一律不得外传。
+# 启动时用 -dir ./knowledge 指向本地目录。
+# =============================================================
+knowledge/**
+# 例外:只让根目录的 README.md 留作公开说明
+# (有 README.md 即足以让 knowledge/ 目录在 clone 后存在,无需 .gitkeep)
+!/knowledge/README.md
