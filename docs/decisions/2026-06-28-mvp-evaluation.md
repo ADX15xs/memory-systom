@@ -4,6 +4,8 @@
 > 评估范围：`cmd/server`、`internal/{tag,fs,search,server,watch}`、`knowledge/`
 > 验证方式：`go build ./...` ✅ 通过 · `go test ./...` ✅ 全部通过
 
+> **补正（2026-08-09）**：本报告标注的两个 🔴 严重缺陷——"草稿审核接口任意文件删除漏洞"与"API 返回的 score 恒为 0"——**已于 2026-08-09 提交 `00083d1` 修复**，并新增 `internal/server/server_test.go` 回归测试；`server` 包现已非"零覆盖"。当前代码已无此二项缺陷，本报告作为 2026-06-28 的历史快照保留。最新状态与剩余缺口见 `docs/decisions/2026-08-09-status-check.md`。
+
 ---
 
 ## 总览

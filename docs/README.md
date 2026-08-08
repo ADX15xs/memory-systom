@@ -20,8 +20,11 @@
 
 | 文件 | 内容 |
 |:--|:--|
-| `decisions/2026-06-28-mvp-evaluation.md` | MVP 自评报告（首次提交后曾被误删，已恢复）。标注两个 🔴 严重缺陷 |
-| `decisions/2026-08-08-kb-pilot-evaluation.md` | 对 kb-pilot 的批判性选型评估。结论：**不采纳为下一形态**，选择性吸收 3 个设计点。文末附来源文章核心论点 |
+| `decisions/2026-06-28-mvp-evaluation.md` | MVP 自评报告（首次提交后曾被误删，已恢复）。原标注两个 🔴 严重缺陷，**已于 2026-08-09 修复**（见状态核对文档） |
+| `decisions/2026-08-08-kb-pilot-evaluation.md` | 对 kb-pilot 的批判性选型评估。结论：**不采纳为下一形态**，选择性吸收 3 个设计点。文末附来源文章核心论点。**第十一节"两缺陷未修复"已过时**（已修复） |
+| `decisions/2026-08-09-status-check.md` | 状态核对与主流方向对照：纠正过时结论、核查当前代码真实状态、WebSearch 验证方向符合主流 |
+
+> 注：上述两份早期报告中的两个 🔴 严重缺陷（路径遍历、score 恒为 0）已于 `00083d1` 修复，勿再将其视为当前阻塞项。最新状态见 `decisions/2026-08-09-status-check.md`。
 
 > 外部原始文章《放弃 RAG，让 AI 像人一样读文档》不纳入本仓库；其核心论点与本项目的批判性评估已整合进 `decisions/2026-08-08-kb-pilot-evaluation.md` 文末，原文见 https://github.com/waylondev/kb-pilot 。
 
