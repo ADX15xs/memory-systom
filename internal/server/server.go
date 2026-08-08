@@ -4,9 +4,11 @@ package server
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 	"log"
 	"net/http"
+	"path/filepath"
 	"strings"
 
 	"knowledge-base/internal/fs"
@@ -145,7 +147,7 @@ func (s *Server) handleQuery(w http.ResponseWriter, r *http.Request) {
 	}
 
 	jsonResult(w, req.ID, map[string]interface{}{
-		"results": resultsToMap(results),
+		"results":  resultsToMap(results),
 		"markdown": buf.String(),
 	})
 }
@@ -159,7 +161,7 @@ func resultsToMap(results []search.Result) []map[string]interface{} {
 			"content":  truncateContent(doc.Content, 200),
 			"tags":     doc.Tags,
 			"filepath": doc.FilePath,
-			"score":    r.Document.Score,
+			"score":    -r.Score, // engine stores a negated sort key; expose hit count
 		}
 	}
 	return out
@@ -251,15 +253,40 @@ func (s *Server) handleListDrafts(w http.ResponseWriter, r *http.Request) {
 	})
 }
 
+// resolveDraftPath validates that the caller-supplied path resolves to a file
+// inside the drafts directory, preventing traversal outside the knowledge base.
+func (s *Server) resolveDraftPath(raw string) (string, error) {
+	if raw == "" {
+		return "", errors.New("path query parameter required")
+	}
+
+	draftsDir, err := filepath.Abs(s.store.DraftsDir())
+	if err != nil {
+		return "", errors.New("cannot resolve drafts directory")
+	}
+
+	target, err := filepath.Abs(raw)
+	if err != nil {
+		return "", errors.New("invalid path")
+	}
+
+	rel, err := filepath.Rel(draftsDir, target)
+	if err != nil || rel == "." || rel == ".." || strings.HasPrefix(rel, ".."+string(filepath.Separator)) {
+		return "", errors.New("path must be inside the drafts directory")
+	}
+
+	return target, nil
+}
+
 func (s *Server) handleApproveDraft(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
 		jsonError(w, http.StatusMethodNotAllowed, -32600, "method not allowed, use POST")
 		return
 	}
 
-	filePath := r.URL.Query().Get("path")
-	if filePath == "" {
-		jsonError(w, http.StatusBadRequest, -32602, "path query parameter required")
+	filePath, err := s.resolveDraftPath(r.URL.Query().Get("path"))
+	if err != nil {
+		jsonError(w, http.StatusBadRequest, -32602, err.Error())
 		return
 	}
 
@@ -286,9 +313,9 @@ func (s *Server) handleRejectDraft(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	filePath := r.URL.Query().Get("path")
-	if filePath == "" {
-		jsonError(w, http.StatusBadRequest, -32602, "path query parameter required")
+	filePath, err := s.resolveDraftPath(r.URL.Query().Get("path"))
+	if err != nil {
+		jsonError(w, http.StatusBadRequest, -32602, err.Error())
 		return
 	}
 

@@ -23,7 +23,6 @@ type Document struct {
 	Status   string   `yaml:"status,omitempty"`
 	FilePath string   // absolute path
 	Content  string   // Markdown body (everything after first ---)
-	Score    float64  // populated by search engine
 }
 
 // FrontMatter is only the YAML header fields, used during parsing.
@@ -157,11 +156,11 @@ func slugify(title string) string {
 
 // Store holds the in-memory document collection.
 type Store struct {
-	mu            sync.RWMutex
-	docs          []*Document
-	rootDir       string
-	draftsDir     string
-	onReload      func() // callback after hot reload
+	mu        sync.RWMutex
+	docs      []*Document
+	rootDir   string
+	draftsDir string
+	onReload  func() // callback after hot reload
 }
 
 // NewStore creates an empty store.
