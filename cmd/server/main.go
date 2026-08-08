@@ -9,12 +9,12 @@ import (
 	"os"
 	"path/filepath"
 
+	"gopkg.in/yaml.v3"
 	"knowledge-base/internal/fs"
 	"knowledge-base/internal/search"
 	"knowledge-base/internal/server"
 	"knowledge-base/internal/tag"
 	"knowledge-base/internal/watch"
-	"gopkg.in/yaml.v3"
 )
 
 func main() {

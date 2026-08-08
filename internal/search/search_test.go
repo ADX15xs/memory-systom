@@ -27,7 +27,7 @@ func TestTokenize(t *testing.T) {
 
 func TestBuildIndexAndSearch(t *testing.T) {
 	mgr := tag.NewManager(map[string][]string{
-		"go": {"golang"},
+		"go":  {"golang"},
 		"k8s": {"kubernetes"},
 	})
 	engine := New(mgr)

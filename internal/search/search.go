@@ -24,10 +24,10 @@ var stopWords = map[string]bool{
 
 // Engine is the inverted-index search engine.
 type Engine struct {
-	mu      sync.RWMutex
-	docs    []*fs.Document
-	index   map[string][]int // term → document indices
-	tagMgr  *tag.Manager
+	mu     sync.RWMutex
+	docs   []*fs.Document
+	index  map[string][]int // term → document indices
+	tagMgr *tag.Manager
 }
 
 // New creates an empty search engine.

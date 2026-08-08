@@ -9,7 +9,7 @@ import (
 
 // Manager handles tag operations.
 type Manager struct {
-	mu     sync.RWMutex
+	mu      sync.RWMutex
 	aliases map[string][]string // canonical → variants
 	reverse map[string]string   // variant → canonical
 }
