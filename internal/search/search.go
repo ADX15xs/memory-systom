@@ -64,13 +64,8 @@ func (e *Engine) BuildIndex(docs []*fs.Document) {
 			e.addTerm(term, docIdx)
 		}
 
-		// Terms from first 100 chars of content
-		contentPreview := doc.Content
-		if len([]rune(contentPreview)) > 100 {
-			contentRunes := []rune(contentPreview)
-			contentPreview = string(contentRunes[:100])
-		}
-		contentTerms := tokenize(contentPreview)
+		// Terms from content
+		contentTerms := tokenize(doc.Content)
 		for _, term := range contentTerms {
 			e.addTerm(term, docIdx)
 		}

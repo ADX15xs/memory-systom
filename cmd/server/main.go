@@ -62,12 +62,7 @@ func main() {
 	})
 
 	watcher, err := watch.New(absDir, func() error {
-		if err := store.Reload(); err != nil {
-			return err
-		}
-		engine.BuildIndex(store.AllDocs())
-		log.Printf("文件变化重载完成，当前 %d 个文档", len(store.AllDocs()))
-		return nil
+		return store.Reload()
 	})
 	if err != nil {
 		log.Fatalf("启动文件监听失败: %v", err)

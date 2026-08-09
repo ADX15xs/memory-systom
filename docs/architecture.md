@@ -199,3 +199,19 @@ curl -X POST http://localhost:8080/draft \
 2. **检索优先于存储**：先设计好用户会怎么问（Query），再设计标签体系（Tags），最后才考虑存储格式。
 3. **人在回路**：Agent 只能写 `drafts/`，入库必须人工确认，确保质量。
 4. **克制**：不做任何“炫技”功能（向量、重排、自动补全），先跑通最小闭环。
+
+---
+
+## 📚 设计参考与取舍
+
+> 设计哲学、prior art 来源与演进路线的完整论述见 [`design-principles.md`](design-principles.md)。
+
+| 设计决策 | 出处 / 对比过的方案 | 取舍理由 |
+| :-- | :-- | :-- |
+| 文件系统即数据库 | 对比 SQLite、向量库；与 Karpathy LLM-Wiki 的增量式 Markdown 知识库同构 | 数据可读可编辑、可 `grep`、可 git 审计，杜绝黑盒链路 |
+| Tag + 倒排索引 | 对比向量检索；与 memora / openclaw-memory / Memori 的 Tag 过滤同思路 | 词法精确匹配，避免向量语义模糊与记忆污染 |
+| 四维标签（场景/域/类型/甲方） | 自研维度体系，受 MemSkill 精简核心记忆启发 | 覆盖团队检索的查询角度，强制 >= 3 维保证可用性 |
+| Dream 模式（离线整理） | 源自 LLM-Wiki 的“沉思 / Linting”维护环节 | 定期去重归档，保持知识库精简 |
+| 人在回路（drafts/ 审核） | 自研流程 | Agent 只写草稿，人工确认入库，保证质量 |
+| 不采纳 kb-pilot | 见 `decisions/2026-08-08-kb-pilot-evaluation.md` | 其解决的长文档切块问题本项目已绕开；检索确定性被证伪 |
+| 无向量 RAG 备选 | PageIndex（VectifyAI）记入备选清单 | 仅在真实长文档需求出现时评估引入，见上述决策文档
